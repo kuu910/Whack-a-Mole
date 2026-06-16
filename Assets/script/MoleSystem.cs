@@ -13,7 +13,7 @@ public class MoleSystem : MonoBehaviour
     private int moleCount = 0; 
     private int maxMoleCount = 30;
     
-    //マスの広さ、奇数不可
+    //マスの広さ
     public int siz = 3;
     public bool[,] moles;
     // Start is called before the first frame update
@@ -69,6 +69,18 @@ public class MoleSystem : MonoBehaviour
         MoleMove newMole = Instantiate(molePrefab, transform);
         newMole.SetUp(x, z);
 
+        newMole.OnHit += HandleMoleHit;
+        newMole.OnHit += HandleMoleVanished;
+    }
 
+    private void HandleMoleHit(int x, int z)
+    {
+        pointCount++;
+        moles[x, z] = false;
+    }
+
+    private void HandleMoleVanished(int x, int z)
+    {
+        moles[x, z] = false;
     }
 }

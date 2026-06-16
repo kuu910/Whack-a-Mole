@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -5,7 +6,9 @@ using UnityEngine;
 
 public class MoleMove : MonoBehaviour
 {
-    MoleSystem system;
+    public event Action<int, int> OnHit;
+    public event Action<int, int> OnVanished;
+
     private int moleX;
     private int moleZ;
     private float myTime = 0.0f;
@@ -16,8 +19,6 @@ public class MoleMove : MonoBehaviour
     {
         moleX = x;
         moleZ = z;
-
-        system = GetComponentInParent<MoleSystem>();
     }
     // Start is called before the first frame update
 
@@ -30,7 +31,8 @@ public class MoleMove : MonoBehaviour
 
         if (transform.position.y < destroyY)
         {
-            StartCoroutine(MoleReset(1f));
+            OnVanished(moleX, moleZ);
+            Destroy(gameObject);
         }
         else
         {
@@ -41,27 +43,18 @@ public class MoleMove : MonoBehaviour
     private void MoleMovement()
     {
         float sin = Mathf.Sin(myTime);
-        float x = moleX;
         float y = -1;
-        float z = moleZ;
-        this.transform.position = new Vector3(x, sin + y, z);
+        this.transform.position = new Vector3(moleX, sin + y, moleZ);
     }
 
-    private IEnumerator MoleReset(float delayTime)
-    {
-        yield return new WaitForSeconds(delayTime);
-
-        system.moles[moleX, moleZ] = false;
-        Destroy(this.gameObject);
-    }
 
     private void OnMouseDown()
     {
         if(click)
         {
             click = false;
-            system.pointCount++;
-            StartCoroutine(MoleReset(0f));
+            OnHit(moleX, moleZ);
+            Destroy(gameObject);
         }
     }
 }
