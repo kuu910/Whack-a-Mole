@@ -9,7 +9,8 @@ public class MoleSystem : MonoBehaviour
     [SerializeField] private TextMeshProUGUI pointText;
     [SerializeField] private StageSetting stageScript;
     public int pointCount = 0;
-    private float moleTime = 1.0f;
+    private float moleSpawnTime;
+    private float moleRespawnTime = 1.0f;
     private int moleCount = 0; 
     private int maxMoleCount = 30;
     
@@ -36,15 +37,15 @@ public class MoleSystem : MonoBehaviour
     {
         if (moleCount < maxMoleCount)
         {
-            if (moleTime <= 0.0f)
+            if (moleSpawnTime <= 0.0f)
             {
                 MoleSpawn();
 
-                moleTime = 1.0f;
+                moleSpawnTime = moleRespawnTime;
             }
             else
             {
-                moleTime -= Time.deltaTime;
+                moleSpawnTime -= Time.deltaTime;
             }
         }
 
@@ -53,6 +54,8 @@ public class MoleSystem : MonoBehaviour
 
     private void MoleSpawn()
     {
+        if (IsGridFull()) return;
+
         moleCount++;
         int x;
         int z;
@@ -82,5 +85,17 @@ public class MoleSystem : MonoBehaviour
     private void HandleMoleVanished(int x, int z)
     {
         moles[x, z] = false;
+    }
+
+    private bool IsGridFull()
+    {
+        for (int i = 0; i < siz; i++)
+        {
+            for (int j = 0; j < siz; j++)
+            {
+                if (!moles[i, j]) return false;
+            }
+        }
+        return true;
     }
 }
