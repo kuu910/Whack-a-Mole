@@ -16,11 +16,11 @@ public class StageSetting : MonoBehaviour
     private float cameraZ = 0;
     // Start is called before the first frame update
 
-    public void StageSet(MoleSystem system)
+    public void StageSet(int moleXCount,int moleZCount)
     {
-        for (int i = 0; i < system.moles.GetLength(0); i++)
+        for (int i = 0; i < moleXCount; i++)
         {
-            for (int j = 0; j < system.moles.GetLength(1); j++)
+            for (int j = 0; j < moleZCount; j++)
             {
                 this.transform.position = new Vector3(x, y, z);
                 Instantiate(stagePrefab, transform.position, transform.rotation);

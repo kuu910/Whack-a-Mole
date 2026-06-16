@@ -30,7 +30,7 @@ public class MoleSystem : MonoBehaviour
             }
         }
 
-        stageScript.StageSet(this);
+        stageScript.StageSet(siz,siz);
     }
 
     private void Update()
